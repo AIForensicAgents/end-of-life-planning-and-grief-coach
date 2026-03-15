@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>End-of-Life Planning & Grief Coach</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/marked/marked.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        sage: { 50: '#f6f7f4', 100: '#e8ebe3', 200: '#d1d7c7', 300: '#b3bda3', 400: '#95a37f', 500: '#7a8a65', 600: '#5f6d4e', 700: '#4a5540', 800: '#3d4636', 900: '#343c2f' },
+        warm: { 50: '#fdf8f3', 100: '#f9edd9', 200: '#f2d9b1', 300: '#e9c080', 400: '#e0a552', 500: '#d68f33', 600: '#be7628', 700: '#9e5c23', 800: '#804a22', 900: '#693e1f' },
+        calm: { 50: '#f5f7fa', 100: '#eaecf2', 200: '#d0d5e3', 300: '#a9b3cb', 400: '#7d8cae', 500: '#5f6f95', 600: '#4b587c', 700: '#3d4765', 800: '#353e55', 900: '#303749' }
+      },
+      fontFamily: {
+        serif: ['Merriweather', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+  * { -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Inter', system-ui, sans-serif; }
+  .serif { font-family: 'Merriweather', Georgia, serif; }
+  .chat-bubble { max-width: 88%; word-wrap: break-word; }
+  .chat-bubble p { margin-bottom: 0.5rem; }
+  .chat-bubble p:last-child { margin-bottom: 0; }
+  .chat-bubble ul, .chat-bubble ol { margin-left: 1.25rem; margin-bottom: 0.5rem; }
+  .chat-bubble li { margin-bottom: 0.25rem; }
+  .fade-in { animation: fadeIn 0.4s ease-out; }
+  .slide-up { animation: slideUp 0.35s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .typing-dot { animation: typingBounce 1.4s infinite ease-in-out both; }
+  .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+  .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+  @keyframes typingBounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+  .module-card:active { transform: scale(0.97); }
+  .module-card { transition: transform 0.15s ease; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: #d1d7c7; border-radius: 4px; }
+  input:focus, textarea:focus { outline: none; }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 16px); }
+</style>
+</head>
+<body class="bg-sage-50 min-h-screen">
+
+<div id="app" class="max-w-lg mx-auto min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-sage-200 px-4 py-3 sticky top-0 z-50">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <button id="backBtn" class="hidden p-2 -ml-2 rounded-full hover:bg-sage-100 min-w-[44px] min-h-[44px] flex items-center justify-center" onclick="goBack()">
+          <svg class="w-5 h-5 text-sage-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <div>
+          <h1 class="serif text-lg font-bold text-sage-800 leading-tight">🕊️ Gentle Guide</h1>
+          <p class="text-xs text-sage-500" id="headerSubtitle">End-of-Life Planning & Grief Coach</p>
+        </div>
+      </div>
+      <button onclick="showSettings()" class="p-2 rounded-full hover:bg-sage-100 min-w-[44px] min-h-[44px] flex items-center justify-center">
+        <svg class="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main id="mainContent" class="flex-1 overflow-y-auto">
+    <!-- Home Screen -->
+    <div id="homeScreen" class="p-4 pb-8">
+      <!-- Welcome -->
+      <div id="welcomeSection" class="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-sage-100 fade-in">
+        <p class="text-sage-700 text-base leading-relaxed" id="welcomeText">
+          Welcome! 💛 I'm here to help you plan with peace of mind. Whether you're thinking about advance directives, navigating grief, or preparing for difficult conversations — you're not alone.
+        </p>
+      </div>
+
+      <!-- Quick Actions -->
+      <h2 class="text-sm font-semibold text-sage-500 uppercase tracking-wider mb-3 px-1">How can I help today?</h2>
+      
+      <div class="space-y-3" id="moduleGrid">
+        <!-- Advance Care Planning -->
+        <button onclick="openModule('advance-care')" class="module-card w-full bg-white rounded-2xl p-4 shadow-sm border border-sage-100 text-left flex items-start gap-4 min-h-[72px]">
+          <div class="w-12 h-12 rounded-xl bg-sage-100 flex items-center justify-center flex-shrink-0 text-2xl">📋</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-sage-800 text-base">Advance Care Planning</h3>
+            <p class="text-sage-500 text-sm mt-0.5">Create directives, living wills & healthcare proxy docs</p>
+          </div>
+          <svg class="w-5 h-5 text-sage-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+
+        <!-- Grief Support -->
+        <button onclick="openModule('grief')" class="module-card w-full bg-white rounded-2xl p-4 shadow-sm border border-sage-100 text-left flex items-start gap-4 min-h-[72px]">
+          <div class="w-12 h-12 rounded-xl bg-warm-100 flex items-center justify-center flex-shrink-0 text-2xl">🤗</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-sage-800 text-base">Grief & Coping Support</h3>
+            <p class="text-sage-500 text-sm mt-0.5">Gentle guidance through grief, loss & emotional care</p>
+          </div>
+          <svg class="w-5 h-5 text-sage-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+
+        <!-- Conversation Scripts -->
+        <button onclick="openModule('conversations')" class="module-card w-full bg-white rounded-2xl p-4 shadow-sm border border-sage-100 text-left flex items-start gap-4 min-h-[72px]">
+          <div class="w-12 h-12 rounded-xl bg-calm-100 flex items-center justify-center flex-shrink-0 text-2xl">💬</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-sage-800 text-base">Difficult Conversations</h3>
+            <p class="text-sage-500 text-sm mt-0.5">Scripts & guidance for talking with family & doctors</p>
+          </div>
+          <svg class="w-5 h-5 text-sage-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+
+        <!-- Medical Document Helper -->
+        <button onclick="openModule('documents')" class="module-card w-full bg-white rounded-2xl p-4 shadow-sm border border-sage-100 text-left flex items-start gap-4 min-h-[72px]">
+          <div class="w-12 h-12 rounded-xl bg-sage-100 flex items-center justify-center flex-shrink-0 text-2xl">🏥</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-sage-800 text-base">Medical Document Summary</h3>
+            <p class="text-sage-500 text-sm mt-0.5">Paste medical docs to get plain-language summaries</p>
+          </div>
+          <svg class="w-5 h-5 text-sage-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+
+        <!-- Local Resources -->
+        <button onclick="openModule('resources')" class="module-card w-full bg-white rounded-2xl p-4 shadow-sm border border-sage-100 text-left flex items-start gap-4 min-h-[72px]">
+          <div class="w-12 h-12 rounded-xl bg-warm-100 flex items-center justify-center flex-shrink-0 text-2xl">📍</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-sage-800 text-base">Local Resources & Referrals</h3>
+            <p class="text-sage-500 text-sm mt-0.5">Find hospice, legal, & support services near you</p>
+          </div>
+          <svg class="w-5 h-5 text-sage-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <!-- Saved Documents -->
+      <div id="savedDocsSection" class="mt-6 hidden">
+        <h2 class="text-sm font-semibold text-sage-500 uppercase tracking-wider mb-3 px-1">📁 Your Saved Documents</h2>
+        <div id="savedDocsList" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div id="chatScreen" class="hidden flex flex-col h-full">
+      <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 pb-4">
+      </div>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settingsScreen" class="hidden p-4 pb-8">
+      <h2 class="serif text-xl font-bold text-sage-800 mb-4">⚙️ Your Profile</h2>
+      <div class="space-y-4">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-sage-100">
+          <label class="block text-sm font-medium text-sage-700 mb-1">Your Name</label>
+          <input id="userName" type="text" placeholder="e.g., Margaret" class="w-full p-3 border border-sage-200 rounded-xl text-base bg-sage-50 focus:border-sage-400 focus:ring-2 focus:ring-sage-200 min-h-[44px]" onchange="saveProfile()">
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-sage-100">
+          <label class="block text-sm font-medium text-sage-700 mb-1">Your State/Province</label>
+          <input id="userState" type="text" placeholder="e.g., California, Ontario" class="w-full p-3 border border-sage-200 rounded-xl text-base bg-sage-50 focus:border-sage-400 focus:ring-2 focus:ring-sage-200 min-h-[44px]" onchange="saveProfile()">
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-sage-100">
+          <label class="block text-sm font-medium text-sage-700 mb-1">I am a...</label>
+          <select id="userRole" class="w-full p-3 border border-sage-200 rounded-xl text-base bg-sage-50 focus:border-sage-400 min-h-[44px]" onchange="saveProfile()">
+            <option value="">Choose your role...</option>
+            <option value="person_planning">Person planning my own care</option>
+            <option value="family_caregiver">Family caregiver</option>
+            <option value="spouse_partner">Spouse/partner of someone in care</option>
+            <option value="grieving">Someone experiencing grief</option>
+            <option value="professional">Healthcare professional</option>
+          </select>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-sage-100">
+          <label class="block text-sm font-medium text-sage-700 mb-2">Text Size</label>
+          <div class="flex gap-2">
+            <button onclick="setFontSize('normal')" id="fontNormal" class="flex-1 py-3 rounded-xl border-2 border-sage-200 text-sm font-medium min-h-[44px] hover:bg-sage-50">Normal</button>
+            <button onclick="setFontSize('large')" id="fontLarge" class="flex-1 py-3 rounded-xl border-2 border-sage-200 text-base font-medium min-h-[44px] hover:bg-sage-50">Large</button>
+            <button onclick="setFontSize('xlarge')" id="fontXLarge" class="flex-1 py-3 rounded-xl border-2 border-sage-200 text-lg font-medium min-h-[44px] hover:bg-sage-50">X-Large</button>
+          </div>
+        </div>
+        <button onclick="clearAllData()" class="w-full py-3 rounded-xl border-2 border-red-200 text-red-600 font-medium min-h-[44px] hover:bg-red-50">
+          🗑️ Clear All Data
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Chat Input Bar -->
+  <div id="chatInputBar" class="hidden bg-white border-t border-sage-200 p-3 safe-bottom sticky bottom-0">
+    <div class="flex gap-2 items-end">
+      <textarea id="chatInput" rows="1" placeholder="Type your message..." class="flex-1 p-3 border border-sage-200 rounded-xl text-base bg-sage-50 resize-none focus:border-sage-400 focus:ring-2 focus:ring-sage-200 min-h-[44px] max-h-[120px]" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+      <button onclick="sendMessage()" id="sendBtn" class="bg-sage-600 text-white p-3 rounded-xl min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-sage-700 active:bg-sage-800 transition-colors disabled:opacity-50" disabled>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+      </button>
+    </div>
+    <div id="quickReplies" class="flex gap-2 mt-2 overflow-x-auto pb-1 hidden">
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-sage-800 text-white px-4 py-2 rounded-xl shadow-lg text-sm z-50 hidden transition-opacity"></div>
+
+<script>
+(function() {
+  // Global AI tracking
+  window.aiTotalInputTokens = 0;
+  window.aiTotalOutputTokens = 0;
+  window.aiTotalTime = 0;
+  window.aiAliasTimes = {};
+
+  const API_BASE = 'https://16504442930.work';
+  
+  let currentScreen = 'home';
+  let currentModule = null;
+  let chatHistory = [];
+  let isLoading = false;
+  let profile = loadProfile();
+  let savedDocs = JSON.parse(localStorage.getItem('gg_saved_docs') || '[]');
+
+  // Init
+  initApp();
+
+  function initApp() {
+    loadProfileToForm();
+    applyFontSize();
+    updateWelcome();
+    renderSavedDocs();
+    document.getElementById('chatInput').addEventListener('input', () => {
+      document.getElementById('sendBtn').disabled = !document.getElementById('chatInput').value.trim();
+    });
+  }
+
+  function loadProfile() {
+    return JSON.parse(localStorage.getItem('gg_profile') || '{"name":"","state":"","role":"","fontSize":"normal"}');
+  }
+
+  window.saveProfile = function() {
+    profile.name = document.getElementById('userName').value;
+    profile.state = document.getElementById('userState').value;
+    profile.role = document.getElementById('userRole').value;
+    localStorage.setItem('gg_profile', JSON.stringify(profile));
+    updateWelcome();
+    showToast('Profile saved ✓');
+  }
+
+  function loadProfileToForm() {
+    document.getElementById('userName').value = profile.name || '';
+    document.getElementById('userState').value = profile.state || '';
+    document.getElementById('userRole').value = profile.role || '';
+    highlightFontBtn(profile.fontSize || 'normal');
+  }
+
+  function updateWelcome() {
+    const name = profile.name ? `, ${profile.name}` : '';
+    const roleTexts = {
+      'person_planning': "I see you're planning your own care — that takes real courage.",
+      'family_caregiver': "Caring for a loved one is one of the most meaningful things you can do.",
+      'spouse_partner': "Supporting your partner through this shows deep love.",
+      'grieving': "Grief is love with nowhere to go. I'm here for you.",
+      'professional': "Thank you for the vital work you do in caring for others."
+    };
+    const roleMsg = profile.role ? ` ${roleTexts[profile.role] || ''}` : '';
+    document.getElementById('welcomeText').innerHTML = `Welcome${name}! 💛 I'm here to help you plan with peace of mind.${roleMsg} Whether you're thinking about advance directives, navigating grief, or preparing for difficult conversations — you're not alone.`;
+  }
+
+  window.setFontSize = function(size) {
+    profile.fontSize = size;
+    localStorage.setItem('gg_profile', JSON.stringify(profile));
+    applyFontSize();
+    highlightFontBtn(size);
+  }
+
+  function applyFontSize() {
+    const sizes = { normal: '16px', large: '18px', xlarge: '20px' };
+    document.getElementById('app').style.fontSize = sizes[profile.fontSize || 'normal'];
+  }
+
+  function highlightFontBtn(size) {
+    ['fontNormal','fontLarge','fontXLarge'].forEach(id => {
+      document.getElementById(id).classList.remove('bg-sage-600','text-white','border-sage-600');
+      document.getElementById(id).classList.add('border-sage-200');
+    });
+    const map = { normal: 'fontNormal', large: 'fontLarge', xlarge: 'fontXLarge' };
+    const btn = document.getElementById(map[size]);
+    if (btn) {
+      btn.classList.add('bg-sage-600','text-white','border-sage-600');
+      btn.classList.remove('border-sage-200');
+    }
+  }
+
+  window.showSettings = function() {
+    showScreen('settings');
+  }
+
+  window.goBack = function() {
+    if (currentScreen === 'chat' || currentScreen === 'settings') {
+      showScreen('home');
+      chatHistory = [];
+      currentModule = null;
+    }
+  }
+
+  function showScreen(screen) {
+    currentScreen = screen;
+    document.getElementById('homeScreen').classList.toggle('hidden', screen !== 'home');
+    document.getElementById('chatScreen').classList.toggle('hidden', screen !== 'chat');
+    document.getElementById('settingsScreen').classList.toggle('hidden', screen !== 'settings');
+    document.getElementById('chatInputBar').classList.toggle('hidden', screen !== 'chat');
+    document.getElementById('backBtn').classList.toggle('hidden', screen === 'home');
+    
+    const subtitles = {
+      'home': 'End-of-Life Planning & Grief Coach',
+      'settings': 'Profile Settings',
+      'chat': getModuleTitle(currentModule)
+    };
+    document.getElementById('headerSubtitle').textContent = subtitles[screen] || '';
+  }
+
+  function getModuleTitle(mod) {
+    const titles = {
+      'advance-care': '📋 Advance Care Planning',
+      'grief': '🤗 Grief & Coping Support',
+      'conversations': '💬 Difficult Conversations',
+      'documents': '🏥 Medical Document Summary',
+      'resources': '📍 Local Resources'
+    };
+    return titles[mod] || '';
+  }
+
+  const moduleSystemPrompts = {
+    'advance-care': `You are a compassionate, knowledgeable end-of-life planning advisor named Gentle Guide. You help older adults and family caregivers create advance care directives, living wills, and healthcare proxy documents. 
+
+KEY RESPONSIBILITIES:
+- Guide users step-by-step through advance care planning
+- Ask about their preferences for medical treatment, resuscitation, life support, organ donation
+- Generate localized legal template text based on their state/province
+- Explain medical and legal terms in simple, clear language
+- Be warm, patient, and reassuring throughout
+
+IMPORTANT RULES:
+- Always clarify you are NOT providing legal advice — recommend consulting an attorney
+- Be sensitive and gentle — this is deeply personal
+- Use simple language appropriate for older adults
+- If the user provides their state, customize advice to that jurisdiction
+- Offer to generate a draft document they can take to their attorney`,
+
+    'grief': `You are a compassionate grief counselor named Gentle Guide. You provide emotional support, coping strategies, and gentle guidance for people experiencing grief, loss, or anticipatory grief related to end-of-life situations.
+
+KEY RESPONSIBILITIES:
+- Validate emotions without judgment
+- Offer evidence-based coping techniques (journaling, breathing exercises, memory work)
+- Help normalize the grieving process and its many forms
+- Suggest when professional help might be beneficial
+- Provide comfort for anticipatory grief (grief before a death)
+
+IMPORTANT RULES:
+- Never minimize or rush grief
+- Be warm, gentle, and deeply empathetic
+- Use simple, comforting language
+- If someone seems in crisis, gently suggest calling 988 Suicide & Crisis Lifeline
+- Remember grief is not linear — validate wherever they are`,
+
+    'conversations': `You are a communication coach named Gentle Guide, specializing in helping people navigate difficult end-of-life conversations with family members, doctors, and loved ones.
+
+KEY RESPONSIBILITIES:
+- Provide tailored conversation scripts and talking points
+- Help with conversations about: wishes for care, prognosis discussions, family disagreements about treatment, telling children about illness, asking doctors the right questions
+- Offer role-play scenarios they can practice
+- Give tips for emotional regulation during hard talks
+
+IMPORTANT RULES:
+- Be practical and specific with scripts
+- Acknowledge how hard these conversations are
+- Provide both the words to say AND tips for delivery
+- Help with active listening techniques
+- Include questions they should ask doctors`,
+
+    'documents': `You are a medical document interpreter named Gentle Guide. You help older adults and family caregivers understand complex medical documents, test results, and treatment plans.
+
+KEY RESPONSIBILITIES:
+- Translate medical jargon into plain language
+- Summarize key findings and what they mean
+- Highlight important decisions that need to be made
+- Suggest questions to ask the medical team
+- Create organized summaries for family meetings
+
+IMPORTANT RULES:
+- Always clarify you cannot provide medical advice — that's for their doctor
+- Be accurate in translation but simple in explanation
+- Flag anything urgent or concerning
+- Help them prepare lists of questions for their next appointment
+- Use analogies and simple comparisons to explain medical concepts`,
+
+    'resources': `You are a local resource finder named Gentle Guide. You help people find hospice care, elder law attorneys, grief support groups, home care services, and other end-of-life related services.
+
+KEY RESPONSIBILITIES:
+- Help identify what type of services they need
+- Provide guidance on what to look for in hospice care, attorneys, etc.
+- Explain Medicare/Medicaid coverage for end-of-life services
+- Suggest national resources and hotlines
+- Guide them on questions to ask potential service providers
+
+IMPORTANT RULES:
+- Be specific and practical
+- Acknowledge geographic limitations of your knowledge
+- Always provide national hotlines as backup (e.g., Eldercare Locator: 1-800-677-1116)
+- Explain the difference between types of services (hospice vs palliative, etc.)
+- Help them evaluate and compare options`
+  };
+
+  const moduleOpeningMessages = {
+    'advance-care': "I'm here to help you think through your advance care wishes. 📋\n\nThis is an important step, and we'll go at your pace. I can help you with:\n\n• **Living Will** — your wishes for medical treatment\n• **Healthcare Proxy** — choosing someone to speak for you\n• **DNR/POLST orders** — emergency care preferences\n\nWould you like to start from the beginning, or is there a specific area you'd like to focus on?",
+    'grief': "I'm glad you're here. 💛\n\nGrief can feel overwhelming, and there's no right or wrong way to experience it. Whether you're grieving a recent loss, preparing for one, or supporting someone who is — I'm here to listen and help.\n\nWould you like to:\n• **Talk about what you're feeling** right now\n• **Learn coping techniques** for difficult moments\n• **Work through anticipatory grief** for an ongoing situation\n\nTake your time. There's no rush.",
+    'conversations': "Talking about end-of-life wishes can be one of the hardest conversations we ever have. 💬\n\nI can help you prepare with:\n\n• **Conversation scripts** tailored to your situation\n• **Tips for bringing up the topic** gently\n• **Questions to ask doctors** during appointments\n• **Strategies for family disagreements**\n\nWho do you need to have a difficult conversation with?",
+    'documents': "I can help you understand medical documents in plain language. 🏥\n\nJust paste or type out any medical document, test result, or treatment plan, and I'll:\n\n• Explain it in **simple terms**\n• Highlight **key decisions** to discuss with your doctor\n• Suggest **questions to ask** at your next appointment\n\nWhat document would you like help understanding?",
+    'resources': "I'll help you find the right support services. 📍\n\nI can guide you to:\n\n• **Hospice & palliative care** providers\n• **Elder law attorneys** for legal documents\n• **Grief support groups** in your area\n• **Home care & caregiver support** services\n• **Financial assistance** programs\n\nWhat kind of help are you looking for?" + (profile.state ? `\n\nI see you're in **${profile.state}** — I'll tailor suggestions to your area.` : "\n\n*Tip: Setting your state in ⚙️ Settings helps me give localized suggestions.*")
+  };
+
+  window.openModule = function(moduleId) {
+    currentModule = moduleId;
+    chatHistory = [];
+    
+    // Load saved chat for this module
+    const saved = JSON.parse(localStorage.getItem(`gg_chat_${moduleId}`) || '[]');
+    
+    showScreen('chat');
+    
+    const chatContainer = document.getElementById('chatMessages');
+    chatContainer.innerHTML = '';
+    
+    if (saved.length > 0) {
+      chatHistory = saved;
+      saved.forEach(msg => {
+        appendMessage(msg.role, msg.content, false);
+      });
+    } else {
+      const opening = moduleOpeningMessages[moduleId];
+      appendMessage('assistant', opening, true);
+      chatHistory.push({ role: 'assistant', content: opening });
+      saveChatHistory();
+    }
+    
+    showQuickReplies(moduleId);
+    scrollToBottom();
+  }
+
+  function showQuickReplies(moduleId) {
+    const replies = {
+      'advance-care': ['Start from beginning', 'Living will', 'Healthcare proxy', 'What is a POLST?'],
+      'grief': ['I need to talk', 'Coping techniques', 'I\'m a caregiver', 'Help me with memories'],
+      'conversations': ['Talk to my family', 'Talk to my doctor', 'Tell the children', 'Family disagrees'],
+      'documents': ['I have test results', 'Treatment plan help', 'What questions to ask?'],
+      'resources': ['Find hospice care', 'Find an attorney', 'Support groups', 'Financial help']
+    };
+    
+    const container = document.getElementById('quickReplies');
+    const items = replies[moduleId] || [];
+    
+    if (items.length && chatHistory.length <= 1) {
+      container.innerHTML = items.map(r => 
+        `<button onclick="sendQuickReply('${r.replace(/'/g,"\\'")}')" class="flex-shrink-0 px-4 py-2 rounded-full bg-sage-100 text-sage-700 text-sm font-medium whitespace-nowrap min-h-[40px] hover:bg-sage-200 active:bg-sage-300 transition-colors">${r}</button>`
+      ).join('');
+      container.classList.remove('hidden');
+    } else {
+      container.classList.add('hidden');
+    }
+  }
+
+  window.sendQuickReply = function(text) {
+    document.getElementById('chatInput').value = text;
+    document.getElementById('sendBtn').disabled = false;
+    sendMessage();
+  }
+
+  window.sendMessage = async function() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text || isLoading) return;
+    
+    input.value = '';
+    input.style.height = 'auto';
+    document.getElementById('sendBtn').disabled = true;
+    document.getElementById('quickReplies').classList.add('hidden');
+    
+    appendMessage('user', text, true);
+    chatHistory.push({ role: 'user', content: text });
+    saveChatHistory();
+    
+    isLoading = true;
+    showTypingIndicator();
+    
+    try {
+      const response = await callAI(text);
+      removeTypingIndicator();
+      appendMessage('assistant', response, true);
+      chatHistory.push({ role: 'assistant', content: response });
+      saveChatHistory();
+      
+      // Check if we should offer to save a document
+      if (currentModule === 'advance-care' && response.toLowerCase().includes('template') || response.toLowerCase().includes('document') || response.toLowerCase().includes('directive')) {
+        // We'll let the AI naturally offer save options
+      }
+    } catch (err) {
+      removeTypingIndicator();
+      const friendlyError = await formatError(err);
+      appendMessage('assistant', friendlyError, true);
+    }
+    
+    isLoading = false;
+    scrollToBottom();
+  }
+
+  async function callAI(userMessage, retries = 3) {
+    const systemPrompt = moduleSystemPrompts[currentModule] || 'You are a helpful, compassionate assistant.';
+    const profileContext = buildProfileContext();
+    
+    // Build conversation context (last 10 messages)
+    const recentHistory = chatHistory.slice(-10).map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`).join('\n\n');
+    
+    const fullPrompt = `${systemPrompt}
+
+${profileContext}
+
+CONVERSATION HISTORY:
+${recentHistory}
+
+User's latest message: ${userMessage}
+
+Respond warmly and helpfully. Use markdown formatting for clarity (bold, bullet points, numbered lists). Keep responses concise but thorough. If generating a legal template or document, format it clearly with headers.
+
+Return your response as a JSON object with exactly this structure:
+{
+  "response": "string - your full response text with markdown formatting"
+}`;
+
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const startTime = Date.now();
+        const res = await fetch(`${API_BASE}/run_prompt`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            alias: 'genericAI',
+            params: { prompt: fullPrompt }
+          })
+        });
+        
+        const elapsed = Date.now() - startTime;
+        window.aiTotalTime += elapsed;
+        window.aiAliasTimes['genericAI'] = (window.aiAliasTimes['genericAI'] || 0) + elapsed;
+        
+        if (!res.ok) {
+          const errText = await res.text();
+          if (attempt === retries) throw new Error(`API error (${res.status}): ${errText}`);
+          continue;
+        }
+        
+        const data = await res.json();
+        
+        if (data.input_tokens) window.aiTotalInputTokens += data.input_tokens;
+        if (data.output_tokens) window.aiTotalOutputTokens += data.output_tokens;
+        
+        return data.response || (typeof data === 'string' ? data : JSON.stringify(data));
+      } catch (err) {
+        if (attempt === retries) throw err;
+        await new Promise(r => setTimeout(r, 1000 * attempt));
+      }
+    }
+  }
+
+  async function formatError(err) {
+    try {
+      const prompt = `The user encountered an error while using an end-of-life planning app. Reformat this error into a friendly, empathetic message that helps them understand what happened and what they can try. Include the technical details at the end in case they need support.
+
+Error: ${err.message || String(err)}
+
+Return as JSON: { "friendly_message": "string - the user-friendly message with emoji and encouragement" }`;
+
+      const res = await fetch(`${API_BASE}/run_prompt`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ alias: 'genericAI', params: { prompt } })
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        return data.friendly_message || `I'm sorry, something went wrong. 😔 Please try again in a moment.\n\n*Technical details: ${err.message}*`;
+      }
+    } catch (e) {}
+    
+    return `I'm sorry, I had trouble connecting. 😔 Please check your internet connection and try again.\n\n*If this keeps happening, try refreshing the page.*\n\n*Error: ${err.message || String(err)}*`;
+  }
+
+  function buildProfileContext() {
+    const parts = [];
+    if (profile.name) parts.push(`User's name: ${profile.name}`);
+    if (profile.state) parts.push(`User's location: ${profile.state}`);
+    if (profile.role) {
+      const roleLabels = {
+        'person_planning': 'Person planning their own end-of-life care',
+        'family_caregiver': 'Family caregiver for a loved one',
+        'spouse_partner': 'Spouse/partner of someone receiving care',
+        'grieving': 'Person experiencing grief or loss',
+        'professional': 'Healthcare professional'
+      };
+      parts.push(`User's role: ${roleLabels[profile.role] || profile.role}`);
+    }
+    return parts.length ? `USER PROFILE:\n${parts.join('\n')}` : 'USER PROFILE: Not yet provided.';
+  }
+
+  function appendMessage(role, content, animate) {
+    const container = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} ${animate ? 'slide-up' : ''}`;
+    
+    const bubble = document.createElement('div');
+    
+    if (role === 'user') {
+      bubble.className = 'chat-bubble bg-sage-600 text-white rounded-2xl rounded-br-md px-4 py-3 text-base';
+      bubble.textContent = content;
+    } else {
+      bubble.className = 'chat-bubble bg-white border border-sage-200 text-sage-800 rounded-2xl rounded-bl-md px-4 py-3 text-base shadow-sm';
+      bubble.innerHTML = marked.parse(content);
+      
+      // Add save button for advance care documents
+      if (currentModule === 'advance-care' && (content.includes('ADVANCE') || content.includes('DIRECTIVE') || content.includes('LIVING WILL') || content.includes('template') || content.length > 500)) {
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'mt-3 w-full py-2 px-4 bg-sage-100 text-sage-700 rounded-xl text-sm font-medium hover:bg-sage-200 min-h-[44px] flex items-center justify-center gap-2';
+        saveBtn.innerHTML = '💾 Save this as a document';
+        saveBtn.onclick = () => saveDocument(content);
+        bubble.appendChild(saveBtn);
+      }
+    }
+    
+    div.appendChild(bubble);
+    container.appendChild(div);
+    scrollToBottom();
+  }
+
+  function showTypingIndicator() {
+    const container = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.id = 'typingIndicator';
+    div.className = 'flex justify-start slide-up';
+    div.innerHTML = `
+      <div class="chat-bubble bg-white border border-sage-200 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm flex items-center gap-1.5">
+        <div class="typing-dot w-2.5 h-2.5 rounded-full bg-sage-400"></div>
+        <div class="typing-dot w-2.5 h-2.5 rounded-full bg-sage-400"></div>
+        <div class="typing-dot w-2.5 h-2.5 rounded-full bg-sage-400"></div>
+      </div>
+    `;
+    container.appendChild(div);
+    scrollToBottom();
+  }
+
+  function removeTypingIndicator() {
+    const el = document.getElementById('typingIndicator');
+    if (el) el.remove();
+  }
+
+  function scrollToBottom() {
+    const container = document.getElementById('chatMessages');
+    setTimeout(() => container.scrollTop = container.scrollHeight, 50);
+  }
+
+  function saveChatHistory() {
+    if (currentModule) {
+      localStorage.setItem(`gg_chat_${currentModule}`, JSON.stringify(chatHistory));
+    }
+  }
+
+  function saveDocument(content) {
+    const doc = {
+      id: Date.now(),
+      module: currentModule,
+      title: currentModule === 'advance-care' ? 'Advance Care Document' : 'Saved Document',
+      content: content,
+      date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    };
+    savedDocs.push(doc);
+    localStorage.setItem('gg_saved_docs', JSON.stringify(savedDocs));
+    showToast('Document saved! 📋');
+    renderSavedDocs();
+  }
+
+  function renderSavedDocs() {
+    const section = document.getElementById('savedDocsSection');
+    const list = document.getElementById('savedDocsList');
+    
+    if (savedDocs.length === 0) {
+      section.classList.add('hidden');
+      return;
+    }
+    
+    section.classList.remove('hidden');
+    list.innerHTML = savedDocs.map(doc => `
+      <div class="bg-white rounded-xl p-3 shadow-sm border border-sage-100 flex items-center gap-3">
+        <div class="text-2xl">📄</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-medium text-sage-800 text-sm truncate">${doc.title}</p>
+          <p class="text-sage-500 text-xs">${doc.date}</p>
+        </div>
+        <button onclick="viewDocument(${doc.id})" class="p-2 text-sage-600 hover:bg-sage-100 rounded-lg min-w-[44px] min-h-[44px] flex items-center justify-center">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        </button>
+        <button onclick="deleteDocument(${doc.id})" class="p-2 text-red-400 hover:bg-red-50 rounded-lg min-w-[44px] min-h-[44px] flex items-center justify-center">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+      </div>
+    `).join('');
+  }
+
+  window.viewDocument = function(id) {
+    const doc = savedDocs.find(d => d.id === id);
+    if (!doc) return;
+    
+    currentModule = 'advance-care';
+    showScreen('chat');
+    document.getElementById('chatMessages').innerHTML = '';
+    appendMessage('assistant', `📄 **${doc.title}** *(saved ${doc.date})*\n\n${doc.content}`, false);
+    chatHistory = [{ role: 'assistant', content: doc.content }];
+  }
+
+  window.deleteDocument = function(id) {
+    if (confirm('Delete this document?')) {
+      savedDocs = savedDocs.filter(d => d.id !== id);
+      localStorage.setItem('gg_saved_docs', JSON.stringify(savedDocs));
+      renderSavedDocs();
+      showToast('Document deleted');
+    }
+  }
+
+  window.clearAllData = function() {
+    if (confirm('This will delete all your saved data, conversations, and documents. Are you sure?')) {
+      localStorage.clear();
+      profile = { name: '', state: '', role: '', fontSize: 'normal' };
+      savedDocs = [];
+      chatHistory = [];
+      loadProfileToForm();
+      renderSavedDocs();
+      applyFontSize();
+      updateWelcome();
+      showToast('All data cleared');
+      showScreen('home');
+    }
+  }
+
+  window.handleKeyDown = function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
+
+  window.autoResize = function(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    toast.style.opacity = '1';
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.classList.add('hidden'), 300);
+    }, 2000);
+  }
+})();
+</script>
+</body>
+</html>
